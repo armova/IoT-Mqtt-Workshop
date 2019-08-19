@@ -10,9 +10,11 @@
 #include <ESP8266WiFi.h>
 #include <MQTT.h>
 
-// YOUR WIFI SSID && PASSWORD HERE:
-const char ssid[] = "";
-const char pass[] = "";
+int i = 0;
+
+// INSERT YOUR NETWORK SSID AND PASSWORD HERE!
+const char ssid[] = "- - - - - -";
+const char pass[] = "- - - - - -";
 
 WiFiClient net;
 MQTTClient client;
@@ -27,7 +29,7 @@ void connect() {
   }
 
   Serial.print("\nconnecting...");
-  while (!client.connect("arduino", "try", "try")) {
+  while (!client.connect("arduino", "83fc5700", "52909f262ae48ccd")) {
     Serial.print(".");
     delay(1000);
   }
@@ -65,6 +67,9 @@ void loop() {
   // publish a message roughly every second.
   if (millis() - lastMillis > 1000) {
     lastMillis = millis();
-    client.publish("/hello", "world");
+    String message1 = "Hello from Feather HUZZAH #";
+    String message2 = message1 + i;
+    i++;
+    client.publish("/hello", message2);
   }
 }
