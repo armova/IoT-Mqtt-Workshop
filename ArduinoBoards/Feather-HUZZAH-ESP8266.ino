@@ -11,10 +11,8 @@
 #include <MQTT.h>
 
 int i = 0;
-
-// INSERT YOUR NETWORK SSID AND PASSWORD HERE!
-const char ssid[] = "- - - - - -";
-const char pass[] = "- - - - - -";
+const char ssid[] = "AMV";
+const char pass[] = "nono2018";
 
 WiFiClient net;
 MQTTClient client;
@@ -29,19 +27,19 @@ void connect() {
   }
 
   Serial.print("\nconnecting...");
-  while (!client.connect("arduino", "83fc5700", "52909f262ae48ccd")) {
+  while (!client.connect("Feather-HUZZAH-1", "83fc5700", "52909f262ae48ccd")) {
     Serial.print(".");
     delay(1000);
   }
 
   Serial.println("\nconnected!");
 
-  client.subscribe("/hello");
-  // client.unsubscribe("/hello");
+  client.subscribe("/example");
+  // client.unsubscribe("/example");
 }
 
 void messageReceived(String &topic, String &payload) {
-  Serial.println("incoming: " + topic + " - " + payload);
+  Serial.println("\nIncoming from mosca broker server: " + topic + " - " + payload);
 }
 
 void setup() {
@@ -50,6 +48,7 @@ void setup() {
 
   // Note: Local domain names (e.g. "Computer.local" on OSX) are not supported by Arduino.
   // You need to set the IP address directly.
+  //client.begin("192.168.43.212", 1883, net);
   client.begin("broker.shiftr.io", net);
   client.onMessage(messageReceived);
 
@@ -67,9 +66,9 @@ void loop() {
   // publish a message roughly every second.
   if (millis() - lastMillis > 1000) {
     lastMillis = millis();
-    String message1 = "Hello from Feather HUZZAH #";
+    String message1 = "Hello from Feather-HUZZAH-1 #";
     String message2 = message1 + i;
     i++;
-    client.publish("/hello", message2);
+    client.publish("/example", message2);
   }
 }
