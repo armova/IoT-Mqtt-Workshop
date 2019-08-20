@@ -1,0 +1,22 @@
+{
+  "name": "mqtt-mosca-server",
+  "version": "1.0.0",
+  "description": "A basic mqtt server",
+  "main": "MoscaServer.js",
+  "scripts": {
+    "start": "node MoscaServer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/armova/IoT-Mqtt-Workshop.git"
+  },
+  "author": "armova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/armova/IoT-Mqtt-Workshop/issues"
+  },
+  "homepage": "https://github.com/armova/IoT-Mqtt-Workshop#readme",
+  "dependencies": {
+    "mosca": "^2.8.3"
+  }
+}

@@ -17,6 +17,7 @@ console.log('client connected', client.id);
 // fired when a message is received
 moscaServer.on('published', function(packet, client) {
     if (packet.topic == '/example') {
+      console.log('\n Message arrived to the mosca broker server: ');
       console.log(packet.payload.toString('utf-8'));
     }
 });
