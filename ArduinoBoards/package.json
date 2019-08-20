@@ -1,0 +1,13 @@
+{
+    "name": "Mqtt-Mosca-Server",
+    "version": "1.0.0",
+    "description": "A basic mqtt mosca server",
+    "main": "MoscaServer.js",
+    "author": "@armova",
+    "scripts": {
+      "start": "node MoscaServer.js"
+    },
+    "dependencies": {
+      "mosca": "^2.8.3"
+    }
+  }
