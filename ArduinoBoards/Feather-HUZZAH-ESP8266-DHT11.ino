@@ -27,6 +27,7 @@ WiFiClient net;
 MQTTClient client;
 
 unsigned long lastMillis = 0;
+char startProcess = true;
 
 // connection function to confirm wifi and mqtt connections, also subscribe to mqtt topics
 void connect() {
@@ -46,12 +47,23 @@ void connect() {
 
   client.subscribe("/data/temperature");
   client.subscribe("/data/humidity");
+  client.subscribe("/control/switch");
   // client.unsubscribe("/example");
 }
 
 // function to handle a received message
 void messageReceived(String &topic, String &payload) {
   Serial.println("\nIncoming from mosca broker server: " + topic + " - " + payload);
+  if (topic == "/control/switch") {
+    Serial.println("\nreceiving control switch message");
+    if (payload == "1") {
+      Serial.println("setting process to true");
+      startProcess = true;
+    } else if (payload == "0") {
+      Serial.println("setting process to false");
+      startProcess = false;
+    }
+  }
 }
 
 void setup() {
@@ -64,8 +76,8 @@ void setup() {
 // Connect to mqtt broker
 //  Note: Local domain names (e.g. "Computer.local" on OSX) are not supported by Arduino.
 //  You need to set the IP address directly.
-//  client.begin("192.168.1.71", 1883, net);
-  client.begin("broker.shiftr.io", net);
+  client.begin("192.168.1.71", 1883, net);
+  //client.begin("broker.shiftr.io", net);
   client.onMessage(messageReceived);
 
   connect();
@@ -100,12 +112,14 @@ void loop() {
   Serial.print("\nhumidity: ");
   Serial.print(humidity);
   Serial.println("%");
+  if (startProcess == true) {
+    // piublish readings to mqtt server
+    const String tempString = "{\"board\":\"Feather1\",\"temperature\":" + String(celsius) + "}";
+    const String humString = "{\"board\":\"Feather1\",\"humidity\":" + String(humidity) + "}";
+    client.publish("/data/temperature", tempString);
+    client.publish("/data/humidity", humString);
+  }
 
-  // piublish readings to mqtt server
-  const String tempString = "{\"board\":\"Feather1\",\"temperature\":" + String(celsius) + "}";
-  const String humString = "{\"board\":\"Feather1\",\"humidity\":" + String(humidity) + "}";
-  client.publish("/data/temperature", tempString);
-  client.publish("/data/humidity", humString);
 
   // wait 5 seconds (5000 milliseconds == 5 seconds)
   delay(5000);

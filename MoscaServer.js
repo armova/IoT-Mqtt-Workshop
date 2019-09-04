@@ -18,7 +18,7 @@ console.log(chalk.yellow('client connected', client.id));
 });
 // fired when a message is received
 moscaServer.on('published', function(packet, client) {
-    if (packet.topic == '/data/temp' || packet.topic == '/data/motion') {
+    if (packet.topic == '/data/temperature' || packet.topic == '/data/humidity' || packet.topic == '/control/switch') {
       console.log(chalk.green('\n Message arrived to the mosca broker server: '));
       console.log(chalk.blue(packet.payload.toString('utf-8')));
     }
